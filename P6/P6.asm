@@ -11,6 +11,7 @@ section .data
 section .text
     global _start
     extern pHex_dw
+    extern putchar      ; NECESARIO para saltos de línea
 
 _start:
 
@@ -23,16 +24,20 @@ _start:
     mov eax, ebx
     call pHex_dw
 
-	mov al,10	; cambio de linea
-	call putchar
+    push eax
+    mov al, 10
+    call putchar
+    pop eax
 
 ; --------------------------------------------
 ; b) Guardar 16 bits bajos en la pila
 ; --------------------------------------------
     push bx
 
-	mov al,10	; cambio de linea
-	call putchar
+    push eax
+    mov al, 10
+    call putchar
+    pop eax
 
 ; --------------------------------------------
 ; c) N = BL * 8 (sin signo)
@@ -46,8 +51,10 @@ _start:
     movzx eax, ax
     call pHex_dw
 
-	mov al,10	; cambio de linea
-	call putchar
+    push eax
+    mov al, 10
+    call putchar
+    pop eax
 
 ; --------------------------------------------
 ; d) Incrementar N
@@ -57,8 +64,10 @@ _start:
     movzx eax, word [N]
     call pHex_dw
 
-	mov al,10	; cambio de linea
-	call putchar
+    push eax
+    mov al, 10
+    call putchar
+    pop eax
 
 ; --------------------------------------------
 ; e) BX / 0xFF
@@ -71,25 +80,34 @@ _start:
     movzx eax, al
     call pHex_dw
 
+    push eax
+    mov al, 10
+    call putchar
+    pop eax
+
     ; Residuo
     movzx eax, ah
     call pHex_dw
 
-	mov al,10	; cambio de linea
-	call putchar
+    push eax
+    mov al, 10
+    call putchar
+    pop eax
 
 ; --------------------------------------------
 ; f) N = N + residuo
 ; --------------------------------------------
     mov ax, [N]
-    add al, ah          ; suma residuo
+    add al, ah
     mov [N], ax
 
     movzx eax, word [N]
     call pHex_dw
 
-	mov al,10	; cambio de linea
-	call putchar
+    push eax
+    mov al, 10
+    call putchar
+    pop eax
 
 ; --------------------------------------------
 ; g) Decrementar N
@@ -99,8 +117,10 @@ _start:
     movzx eax, word [N]
     call pHex_dw
 
-	mov al,10	; cambio de linea
-	call putchar
+    push eax
+    mov al, 10
+    call putchar
+    pop eax
 
 ; --------------------------------------------
 ; h) Recuperar dato de la pila
@@ -110,8 +130,10 @@ _start:
     movzx eax, bx
     call pHex_dw
 
-	mov al,10	; cambio de linea
-	call putchar
+    push eax
+    mov al, 10
+    call putchar
+    pop eax
 
 ; --------------------------------------------
 ; Salida
