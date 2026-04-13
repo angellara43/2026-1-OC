@@ -23,10 +23,16 @@ _start:
     mov eax, ebx
     call pHex_dw
 
+	mov al,10	; cambio de linea
+	call putchar
+
 ; --------------------------------------------
 ; b) Guardar 16 bits bajos en la pila
 ; --------------------------------------------
     push bx
+
+	mov al,10	; cambio de linea
+	call putchar
 
 ; --------------------------------------------
 ; c) N = BL * 8 (sin signo)
@@ -40,6 +46,9 @@ _start:
     movzx eax, ax
     call pHex_dw
 
+	mov al,10	; cambio de linea
+	call putchar
+
 ; --------------------------------------------
 ; d) Incrementar N
 ; --------------------------------------------
@@ -47,6 +56,9 @@ _start:
 
     movzx eax, word [N]
     call pHex_dw
+
+	mov al,10	; cambio de linea
+	call putchar
 
 ; --------------------------------------------
 ; e) BX / 0xFF
@@ -63,6 +75,9 @@ _start:
     movzx eax, ah
     call pHex_dw
 
+	mov al,10	; cambio de linea
+	call putchar
+
 ; --------------------------------------------
 ; f) N = N + residuo
 ; --------------------------------------------
@@ -73,6 +88,9 @@ _start:
     movzx eax, word [N]
     call pHex_dw
 
+	mov al,10	; cambio de linea
+	call putchar
+
 ; --------------------------------------------
 ; g) Decrementar N
 ; --------------------------------------------
@@ -81,6 +99,9 @@ _start:
     movzx eax, word [N]
     call pHex_dw
 
+	mov al,10	; cambio de linea
+	call putchar
+
 ; --------------------------------------------
 ; h) Recuperar dato de la pila
 ; --------------------------------------------
@@ -88,6 +109,9 @@ _start:
 
     movzx eax, bx
     call pHex_dw
+
+	mov al,10	; cambio de linea
+	call putchar
 
 ; --------------------------------------------
 ; Salida
