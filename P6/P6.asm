@@ -3,6 +3,8 @@
 ; Matrícula: 2222625 -> 0x0021E8D1
 ; ============================================
 
+%include "../LIB/pc_iox.inc"
+
 section .data
     N dw 0              ; Variable de 2 bytes
 
