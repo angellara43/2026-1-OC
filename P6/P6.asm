@@ -26,8 +26,6 @@ _start:
 
     push eax
     mov al, 10
-    call putchar
-    pop eax
 
 ; --------------------------------------------
 ; b) Guardar 16 bits bajos en la pila
