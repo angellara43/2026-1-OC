@@ -1,5 +1,6 @@
 ; ============================================
 ; Práctica 6 - Organización de Computadoras
+; Matrícula: 2222625 -> 0x0021E8D1
 ; ============================================
 
 section .data
@@ -7,7 +8,7 @@ section .data
 
 section .text
     global _start
-    extern pHex_dw      ; Subrutina para imprimir en hexadecimal
+    extern pHex_dw
 
 _start:
 
@@ -15,27 +16,27 @@ _start:
 ; a) EBX = 0x5C4B2A60 + matrícula
 ; --------------------------------------------
     mov ebx, 0x5C4B2A60
-    add ebx, 0x2222625
+    add ebx, 0x0021E8D1
 
     mov eax, ebx
-    call pHex_dw        ; Imprimir EBX
+    call pHex_dw
 
 ; --------------------------------------------
-; b) Guardar 16 bits bajos de EBX en la pila
+; b) Guardar 16 bits bajos en la pila
 ; --------------------------------------------
     push bx
 
 ; --------------------------------------------
 ; c) N = BL * 8 (sin signo)
 ; --------------------------------------------
-    mov al, bl          ; AL = BL
+    mov al, bl
     mov bl, 8
     mul bl              ; AX = AL * BL
 
-    mov [N], ax         ; Guardar resultado en N
+    mov [N], ax
 
     movzx eax, ax
-    call pHex_dw        ; Imprimir N
+    call pHex_dw
 
 ; --------------------------------------------
 ; d) Incrementar N
@@ -46,25 +47,25 @@ _start:
     call pHex_dw
 
 ; --------------------------------------------
-; e) División BX / 0xFF
+; e) BX / 0xFF
 ; --------------------------------------------
     mov ax, bx
     mov bl, 0xFF
     div bl              ; AL = cociente, AH = residuo
 
-    ; Imprimir cociente
+    ; Cociente
     movzx eax, al
     call pHex_dw
 
-    ; Imprimir residuo
+    ; Residuo
     movzx eax, ah
     call pHex_dw
 
 ; --------------------------------------------
 ; f) N = N + residuo
 ; --------------------------------------------
-    movzx eax, word [N]
-    add al, ah          ; Sumar residuo
+    mov ax, [N]
+    add al, ah          ; suma residuo
     mov [N], ax
 
     movzx eax, word [N]
@@ -79,7 +80,7 @@ _start:
     call pHex_dw
 
 ; --------------------------------------------
-; h) Sacar dato de la pila
+; h) Recuperar dato de la pila
 ; --------------------------------------------
     pop bx
 
@@ -87,8 +88,8 @@ _start:
     call pHex_dw
 
 ; --------------------------------------------
-; Salida del programa
+; Salida
 ; --------------------------------------------
-    mov eax, 1          ; syscall: exit
-    xor ebx, ebx        ; código de salida 0
+    mov eax, 1
+    xor ebx, ebx
     int 0x80
