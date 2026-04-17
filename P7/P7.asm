@@ -1,138 +1,135 @@
 ; ============================================
-; Práctica 7 - Organización de Computadoras
+; Práctica 7 - CORREGIDA
 ; ============================================
 
 %include "../LIB/pc_iox.inc"
 
 section .data
-
 N dw 0
 
 section .text
     global _start
     extern pHex_dw
-    extern putchar      ; NECESARIO para saltos de línea
+    extern putchar
 
 _start:
 
 ; --------------------------------------------
-; a) EAX = 0x22446688 -> 0x822446688.
+; a) Rotación
 ; --------------------------------------------
     mov eax, 0x22446688
-    add eax, 0x22446688
-    add eax, 0x22446688
-    add eax, 0x22446688
+    rol eax, 4            ; rotar 4 bits
 
-    mov ebx, eax
     call pHex_dw
-
-    push ebx
-    mov al, 10
-    call putchar
-    pop eax
+    call salto
 
 ; --------------------------------------------
-; b) CX = 0x3F48 -> 0xFA40.
+; b) Corrimiento
 ; --------------------------------------------
     mov cx, 0x3F48
-    add bx, 0x3F48
-    add bx, 0x3F48
-    add bx, 0x3F48
+    shl cx, 2             ; *4
 
-    mov cx, bx
+    movzx eax, cx
     call pHex_dw
-
-    push cx
-    mov al, 10
-    call putchar
+    call salto
 
 ; --------------------------------------------
-; c) ESI = 0x20D685F3 -> invertir bits.
+; c) Invertir bits específicos
 ; --------------------------------------------
+    mov esi, 0x20D685F3
 
-    mov ESI, 0x20D685F3
+    mov eax, 0
+    bts eax, 0
+    bts eax, 5
+    bts eax, 13
+    bts eax, 18
+    bts eax, 30
 
-;---------------------------------------------
-; d) Guardar ESI en la pila.
-;---------------------------------------------
-    push bx
+    xor esi, eax
 
-    push ESI
-    mov al, 10
-    call putchar
-    pop ESI
-
-;---------------------------------------------
-; e) CH = 0xA7 -> activar los bits 3 y 6.
-;---------------------------------------------
-
-    mov CH, 0xA7
-
-;-----------------------------------------------------
-; f) BP = 0x67DA -> desactivar bits: 1, 4, 6, 10 y 14.
-;-----------------------------------------------------
-
-;-----------------------------------------------------
-; g) N = BP / 8
-;-----------------------------------------------------
-
-    mov al, bl
-    mov bl, 8
-    mul bl
-
-    mov [N], ax
-
-    movzx eax, ax
+    mov eax, esi
     call pHex_dw
+    call salto
 
-    push eax
-    mov al, 10
-    call putchar
-    pop eax
+; --------------------------------------------
+; d) Guardar en pila
+; --------------------------------------------
+    push esi
 
-;-----------------------------------------------------
-; h)  EBX / 32
-;-----------------------------------------------------
+; --------------------------------------------
+; e) Activar bits 3 y 6
+; --------------------------------------------
+    mov ch, 0xA7
+    or ch, (1 << 3) | (1 << 6)
 
-;-----------------------------------------------------
+    movzx eax, ch
+    call pHex_dw
+    call salto
+
+; --------------------------------------------
+; f) Desactivar bits
+; --------------------------------------------
+    mov bp, 0x67DA
+
+    mov ax, 0FFFFh
+    btr ax, 1
+    btr ax, 4
+    btr ax, 6
+    btr ax, 10
+    btr ax, 14
+
+    and bp, ax
+
+    movzx eax, bp
+    call pHex_dw
+    call salto
+
+; --------------------------------------------
+; g) BP / 8
+; --------------------------------------------
+    shr bp, 3
+
+    movzx eax, bp
+    call pHex_dw
+    call salto
+
+; --------------------------------------------
+; h) EBX / 32
+; --------------------------------------------
+    mov ebx, 0x12345678
+    shr ebx, 5
+
+    mov eax, ebx
+    call pHex_dw
+    call salto
+
+; --------------------------------------------
 ; i) CX * 8
-;-----------------------------------------------------
+; --------------------------------------------
+    shl cx, 3
 
-    mov cx, dx
-    mov dx, 8
-    mul dx
-
-    mov [N], ax
-
-    movzx eax, ax
+    movzx eax, cx
     call pHex_dw
+    call salto
 
-    push eax
-    mov al, 10
-    call putchar
-    pop eax
+; --------------------------------------------
+; j) Sacar de pila
+; --------------------------------------------
+    pop esi
 
-;-----------------------------------------------
-; j) Sacar un valor de la pila y guardar en ESI.
-;-----------------------------------------------
+; --------------------------------------------
+; k) ESI * 10 (8 + 2)
+; --------------------------------------------
+    mov eax, esi
+    shl eax, 3        ; *8
 
-;-----------------------------------------------
-; k) ESI * 10.
-;-----------------------------------------------
+    mov ebx, esi
+    shl ebx, 1        ; *2
 
-    mov ESI, eax
-    mov eax, 10
-    mul eax
+    add eax, ebx      ; 8 + 2 = 10
 
-    mov [N], ax
-
-    movzx eax, ax
     call pHex_dw
-
-    push eax
-    mov al, 10
-    call putchar
-    pop eax
+    call salto
 
 ; --------------------------------------------
 ; Salida
@@ -140,3 +137,14 @@ _start:
     mov eax, 1
     xor ebx, ebx
     int 0x80
+
+
+; --------------------------------------------
+; salto de línea
+; --------------------------------------------
+salto:
+    push eax
+    mov al, 10
+    call putchar
+    pop eax
+    ret
