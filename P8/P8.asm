@@ -11,8 +11,6 @@ msg_num db "Es numero", 0
 msg_letra db "Es letra", 0
 msg_otro db "Es otro caracter", 0
 
-msg_ datos db "Datos capturados: ", 0
-
 section .bss
     arreglo resb 10
 
