@@ -11,6 +11,7 @@ section .text
     global _start
     extern pHex_dw
     extern putchar
+    extern pBin_b
 
 _start:
 
