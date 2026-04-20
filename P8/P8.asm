@@ -120,3 +120,6 @@ mov al, [si]
 call putc
 call newline
 inc si
+loop mostrar
+
+call exit
