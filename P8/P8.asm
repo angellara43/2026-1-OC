@@ -96,9 +96,9 @@ pop cx
 inc bx
 loop fila_loop
 
-;============
-;D) Secuencia
-;============
+;=======================
+;D) Secuencia para datos
+;=======================
 
 mov cx, 10
 mov si, arreglo
