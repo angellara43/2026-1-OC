@@ -11,7 +11,7 @@ msg_num db "Es numero", 0
 msg_letra db "Es letra", 0
 msg_otro db "Es otro caracter", 0
 
-msg_ datos db "Datos capturados: ", 0
+msg_datos db "Datos capturados: ", 0
 
 section .bss
     arreglo resb 10
@@ -96,3 +96,27 @@ pop cx
 inc bx
 loop fila_loop
 
+;============
+;D) Secuencia
+;============
+
+mov cx, 10
+mov si, arreglo
+
+captura:
+call getche
+mov [si], al
+inc al
+loop captura
+
+mov edx, msg_datos
+call puts
+
+mov cx, 10
+mov si, arreglo
+
+mostrar:
+mov al, [si]
+call putc
+call newline
+inc si
