@@ -43,3 +43,28 @@ fin_a:
 ;==================
 ;B) Letra o numero.
 ;==================
+
+call getche
+mov bl, al
+
+cmp bl, '0'
+jl revisar_letra
+cmp bl, '9'
+jle es_numero
+
+revisar_letra:
+cmp bl, 'A'
+jl otro
+cmp bl, 'Z'
+jle es_letra
+
+otro:
+mov edx, msg_otro
+call puts
+jmp fin_b
+
+es_numero:
+mov edx, msg_num
+call puts
+jmp fin_b
+
