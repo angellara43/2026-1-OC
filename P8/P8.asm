@@ -68,3 +68,9 @@ mov edx, msg_num
 call puts
 jmp fin_b
 
+es_letra:
+mov edx, msg_letra
+call puts
+
+fin_b:
+
