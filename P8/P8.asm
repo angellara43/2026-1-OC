@@ -76,3 +76,6 @@ fin_b:
 ;C) Triangulo con asteriscos.
 ;============================
 
+call getche
+mov cx, 3
+
