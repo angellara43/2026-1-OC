@@ -123,17 +123,17 @@ loop mostrar
 ;======
 ;Salida
 ;======
-    mov eax, 1
-    xor ebx, ebx
-    int 0x80
+mov eax, 1
+xor ebx, ebx
+int 0x80
 
 
 ;==============
 ;Salto de línea
 ;==============
 salto:
-    push eax
-    mov al, 10
-    call putchar
-    pop eax
-    ret
+push eax
+mov al, 10
+call putchar
+pop eax
+ret
