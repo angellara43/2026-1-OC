@@ -87,10 +87,7 @@ mov cx, bx
 
 col_loop:
 mov al, '*'
-call putc
 loop col_loop
-
-call newline
 
 pop cx
 inc bx
@@ -117,9 +114,23 @@ mov si, arreglo
 
 mostrar:
 mov al, [si]
-call putc
-call newline
 inc si
 loop mostrar
 
-call exit
+;======
+;Salida
+;======
+    mov eax, 1
+    xor ebx, ebx
+    int 0x80
+
+
+;==============
+;Salto de línea
+;==============
+salto:
+    push eax
+    mov al, 10
+    call putchar
+    pop eax
+    ret
