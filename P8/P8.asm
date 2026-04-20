@@ -11,6 +11,8 @@ msg_num db "Es numero", 0
 msg_letra db "Es letra", 0
 msg_otro db "Es otro caracter", 0
 
+msg_ datos db "Datos capturados: ", 0
+
 section .bss
     arreglo resb 10
 
@@ -76,6 +78,21 @@ fin_b:
 ;C) Triangulo con asteriscos.
 ;============================
 
-call getche
-mov cx, 3
+mov cx, 5
+mov bx, 1
+
+fila_loop:
+push cx
+mov cx, bx
+
+col_loop:
+mov al, '*'
+call putc
+loop col_loop
+
+call newline
+
+pop cx
+inc bx
+loop fila_loop
 
