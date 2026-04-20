@@ -19,7 +19,7 @@ _start:
 ; a) Rotación
 ; --------------------------------------------
     mov eax, 0x22446688
-    rol eax, 4            ; rotar 4 bits
+    rol eax, 12
 
     call pHex_dw
     call salto
@@ -28,7 +28,7 @@ _start:
 ; b) Corrimiento
 ; --------------------------------------------
     mov cx, 0x3F48
-    shl cx, 2             ; *4
+    shl cx, 3
 
     movzx eax, cx
     call pHex_dw
