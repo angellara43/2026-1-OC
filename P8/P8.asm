@@ -126,14 +126,3 @@ loop mostrar
 mov eax, 1
 xor ebx, ebx
 int 0x80
-
-
-;==============
-;Salto de línea
-;==============
-salto:
-push eax
-mov al, 10
-call putchar
-pop eax
-ret
