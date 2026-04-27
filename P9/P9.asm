@@ -7,10 +7,6 @@
 section .data
 msg_input db "Ingrese un vector de tamaño ", 0
 msg_enter db "Ingrese valor (0-9): ", 0
-msg_sum db "Vector suma: ", 0
-msg_dot db "Producto escalar: ", 0
-msg_newline db 10, 0
-N equ 5
 
 section .bss
 
