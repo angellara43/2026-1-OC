@@ -69,9 +69,9 @@ mov eax, 1
 xor ebx, ebx
 int 0x80
 
-;======================================
+;==============================
 ; A) Procedimiento input_vector
-;======================================
+;==============================
 input_vector:
 push eax
 push ebx
@@ -109,6 +109,33 @@ pop ebx
 pop eax
 ret
 
-;====================================
-; B) Procedimiento 
-;====================================
+;===============================
+; B) Procedimiento output_vector
+;===============================
+output_vector:
+push eax
+push ebx
+push ecx
+push esi
+
+xor esi, esi
+
+.output_loop:
+cmp esi, ecx
+jge .output_done
+
+mov al, byte [ebx + esi]
+call pHex_b ; Desplegar byte en hexadecimal
+    
+mov al, ' '
+call putchar
+
+inc esi
+jmp .output_loop
+
+.output_done:
+pop esi
+pop ecx
+pop ebx
+pop eax
+ret
