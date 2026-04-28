@@ -4,15 +4,21 @@
 
 %include "../LIB/pc_iox.inc"
 
+N       equ 5
+
 section .data
-msg_input db "Ingrese un vector de tamaño ", 0
-msg_enter db "Ingrese valor (0-9): ", 0
+msg_title     db "Suma y producto escalar de vectores", 10, 0
+msg_first     db "Ingrese primer vector:", 10, 0
+msg_second    db "Ingrese segundo vector:", 10, 0
+msg_sum       db "Vector suma:", 10, 0
+msg_dot       db "Producto escalar: ", 0
+msg_enter     db "Ingrese valor (0-9): ", 0
+msg_newline   db 10, 0
 
 section .bss
-
-vector1 resb 10
-vector2 resb 10
-vector_sum resb 10
+vector1       resb N
+vector2       resb N
+scalar_result resd 1
 
 section .text
 global _start
@@ -21,53 +27,54 @@ extern getche, puts, putchar, pHex_b, pHex_dw, clrscr
 _start:
 call clrscr
 
-;Leer primer vector
-mov ebx, vector1
-mov ecx, N
-call input_vector
+    mov edx, msg_title
+    call puts
 
-mov edx, msg_newline
-call puts
+    mov edx, msg_first
+    call puts
+    mov ebx, vector1
+    mov ecx, N
+    call input_vector
 
-;Leer segundo vector
-mov ebx, vector2
-mov ecx, N
-call input_vector
+    mov edx, msg_second
+    call puts
+    mov ebx, vector2
+    mov ecx, N
+    call input_vector
 
-mov edx, msg_newline
-call puts
+    ; Calcular producto escalar primero
+    mov ebx, vector1
+    mov edx, vector2
+    mov ecx, N
+    call dot_product
+    mov [scalar_result], eax
 
-;Calcular suma de vectores
-mov ebx, vector1
-mov edx, vector2
-mov ecx, N
-call sum_vectors
+    ; Calcular suma de vectores en vector1
+    mov ebx, vector1
+    mov edx, vector2
+    mov ecx, N
+    call sum_vectors
 
-;Desplegar suma
-mov edx, msg_sum
-call puts
-mov ebx, vector_sum
-mov ecx, N
-call output_vector
+    ; Mostrar vector suma
+    mov edx, msg_sum
+    call puts
+    mov ebx, vector1
+    mov ecx, N
+    call output_vector
+    mov al, 10
+    call putchar
 
-mov edx, msg_newline
-call puts
+    ; Mostrar producto escalar
+    mov edx, msg_dot
+    call puts
+    mov eax, [scalar_result]
+    call pHex_dw
+    mov al, 10
+    call putchar
 
-;Calcular y desplegar producto escalar
-mov edx, msg_dot
-call puts
-mov ebx, vector1
-mov edx, vector2
-mov ecx, newline
-call dot_product
-
-mov al, 10
-call putchar
-
-;Salir
-mov eax, 1
-xor ebx, ebx
-int 0x80
+    mov eax, 1
+    xor ebx, ebx
+    int 0x80
 
 ;==============================
 ; A) Procedimiento input_vector
@@ -113,29 +120,29 @@ ret
 ; B) Procedimiento output_vector
 ;===============================
 output_vector:
-push eax
-push ebx
-push ecx
-push esi
+    push eax
+    push ebx
+    push ecx
+    push esi
 
-xor esi, esi
+    xor esi, esi
 
 .output_loop:
-cmp esi, ecx
-jge .output_done
+    cmp esi, ecx
+    jge .output_done
 
-mov al, byte [ebx + esi]
-call pHex_b ; Desplegar byte en hexadecimal
-    
-mov al, ' '
-call putchar
+    mov al, [ebx + esi]
+    call pHex_b
 
-inc esi
-jmp .output_loop
+    mov al, ' '
+    call putchar
+
+    inc esi
+    jmp .output_loop
 
 .output_done:
-pop esi
-pop ecx
-pop ebx
-pop eax
-ret
+    pop esi
+    pop ecx
+    pop ebx
+    pop eax
+    ret
