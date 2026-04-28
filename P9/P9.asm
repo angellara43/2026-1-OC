@@ -146,3 +146,7 @@ output_vector:
     pop ebx
     pop eax
     ret
+
+    ;==========================
+    ; C) Suma Vectores.
+    ;==========================
