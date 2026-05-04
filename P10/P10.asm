@@ -21,11 +21,11 @@ xor eax, eax        ;num2
 mov cl, byte
 test cl, cl
 jz.fin
-
 inc eax
 jmp .ciclo
 
 getBit:
+push ebp
 
 
 pop ebp
