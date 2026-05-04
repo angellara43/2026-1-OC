@@ -147,6 +147,69 @@ output_vector:
     pop eax
     ret
 
-    ;==========================
-    ; C) Suma Vectores.
-    ;==========================
+;==========================
+; C) Suma de vectores
+;==========================
+sum_vectors:
+    push eax
+    push ebx
+    push ecx
+    push edx
+    push esi
+
+    xor esi, esi
+
+.sum_loop:
+    cmp esi, ecx
+    jge .sum_done
+
+    mov al, [ebx + esi]     ; vector1[i]
+    add al, [edx + esi]     ; vector1[i] + vector2[i]
+    mov [ebx + esi], al     ; guardar en vector1
+
+    inc esi
+    jmp .sum_loop
+
+.sum_done:
+    pop esi
+    pop edx
+    pop ecx
+    pop ebx
+    pop eax
+    ret
+
+
+;==========================
+; D) Producto escalar
+;==========================
+dot_product:
+    push ebx
+    push ecx
+    push edx
+    push esi
+
+    xor eax, eax        ; resultado = 0
+    xor esi, esi
+
+.dot_loop:
+    cmp esi, ecx
+    jge .dot_done
+
+    mov bl, [ebx + esi]   ; vector1[i]
+    mov dl, [edx + esi]   ; vector2[i]
+
+    movzx ebx, bl         ; convertir a 32 bits
+    movzx edx, dl
+
+    imul ebx, edx         ; ebx = v1[i] * v2[i]
+    add eax, ebx          ; acumular
+
+    inc esi
+    jmp .dot_loop
+
+.dot_done:
+    pop esi
+    pop edx
+    pop ecx
+    pop ebx
+    ret
