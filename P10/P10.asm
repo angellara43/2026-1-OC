@@ -20,13 +20,8 @@ xor eax, eax        ;num2
 .ciclo:
 mov cl, byte
 test cl, cl
-jz.fin
 inc eax
 jmp .ciclo
-
-getBit:
-push ebp
-
 
 pop ebp
 ret
