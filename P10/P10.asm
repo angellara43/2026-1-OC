@@ -22,7 +22,11 @@ mov cl, byte
 test cl, cl
 jz.fin
 
-inc num1
+inc eax
+jmp .ciclo
+
+getBit:
+
 
 pop ebp
 ret
