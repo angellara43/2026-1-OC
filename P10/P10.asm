@@ -18,8 +18,9 @@ mov edx, [ebp+8]    ;num1
 xor eax, eax        ;num2
 
 .ciclo:
-mov cl, byte
+mov cl, byte [edx+eax]
 test cl, cl
+jz .fin
 inc eax
 jmp .ciclo
 
