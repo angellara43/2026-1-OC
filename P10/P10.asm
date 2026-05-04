@@ -8,14 +8,14 @@ global getBit
 suma: 
 push ebp
 mov ebp, esp
-mov eax, [ebp+8] ;num1
-add eax, [ebp+12] ;num2
+mov eax, [ebp+8]    ;num1
+add eax, [ebp+12]   ;num2
 
 strlen:
 push ebp
 mov ebp, esp
-mov edx, [ebp+8]
-xor eax, eax
+mov edx, [ebp+8]    ;num1
+xor eax, eax        ;num2
 
 .ciclo:
 mov cl, byte
