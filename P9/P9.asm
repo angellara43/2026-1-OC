@@ -13,7 +13,6 @@ msg_second    db "Ingrese segundo vector:", 10, 0
 msg_sum       db "Vector suma:", 10, 0
 msg_dot       db "Producto escalar: ", 0
 msg_enter     db "Ingrese valor (0-9): ", 0
-msg_newline   db 10, 0
 
 section .bss
 vector1       resb N
@@ -25,37 +24,39 @@ global _start
 extern getche, puts, putchar, pHex_b, pHex_dw, clrscr
 
 _start:
-call clrscr
+    call clrscr
 
     mov edx, msg_title
     call puts
 
+    ; ===== Vector 1 =====
     mov edx, msg_first
     call puts
     mov ebx, vector1
     mov ecx, N
     call input_vector
 
+    ; ===== Vector 2 =====
     mov edx, msg_second
     call puts
     mov ebx, vector2
     mov ecx, N
     call input_vector
 
-    ; Calcular producto escalar primero
+    ; ===== Producto escalar =====
     mov ebx, vector1
     mov edx, vector2
     mov ecx, N
     call dot_product
     mov [scalar_result], eax
 
-    ; Calcular suma de vectores en vector1
+    ; ===== Suma de vectores =====
     mov ebx, vector1
     mov edx, vector2
     mov ecx, N
     call sum_vectors
 
-    ; Mostrar vector suma
+    ; ===== Mostrar suma =====
     mov edx, msg_sum
     call puts
     mov ebx, vector1
@@ -64,7 +65,7 @@ call clrscr
     mov al, 10
     call putchar
 
-    ; Mostrar producto escalar
+    ; ===== Mostrar producto escalar =====
     mov edx, msg_dot
     call puts
     mov eax, [scalar_result]
@@ -72,53 +73,52 @@ call clrscr
     mov al, 10
     call putchar
 
+    ; ===== Salida =====
     mov eax, 1
     xor ebx, ebx
     int 0x80
 
 ;==============================
-; A) Procedimiento input_vector
+; A) input_vector
 ;==============================
 input_vector:
-push eax
-push ebx
-push ecx
-push esi
+    push eax
+    push ebx
+    push ecx
+    push esi
 
-xor esi, esi
+    xor esi, esi
 
 .input_loop:
-cmp esi, ecx
-jge .input_done
+    cmp esi, ecx
+    jge .done
 
-mov edx, msg_enter
-call puts
+    mov edx, msg_enter
+    call puts
 
-;Leer caracter
-call getche
-sub al, '0'
-    
-;Validar que esté en rango 0-9
-cmp al, 0
-jb .input_loop
-cmp al, 9
-ja .input_loop
+.read:
+    call getche
+    sub al, '0'
 
-;Almacenar el valor en el vector
-mov byte [ebx + esi], al
-inc esi
-jmp .input_loop
+    cmp al, 0
+    jb .read
+    cmp al, 9
+    ja .read
 
-.input_done:
-pop esi
-pop ecx
-pop ebx
-pop eax
-ret
+    mov [ebx + esi], al
+    inc esi
+    jmp .input_loop
 
-;===============================
-; B) Procedimiento output_vector
-;===============================
+.done:
+    pop esi
+    pop ecx
+    pop ebx
+    pop eax
+    ret
+
+;==============================
+; B) output_vector
+;==============================
 output_vector:
     push eax
     push ebx
@@ -127,9 +127,9 @@ output_vector:
 
     xor esi, esi
 
-.output_loop:
+.loop:
     cmp esi, ecx
-    jge .output_done
+    jge .done
 
     mov al, [ebx + esi]
     call pHex_b
@@ -138,18 +138,18 @@ output_vector:
     call putchar
 
     inc esi
-    jmp .output_loop
+    jmp .loop
 
-.output_done:
+.done:
     pop esi
     pop ecx
     pop ebx
     pop eax
     ret
 
-;==========================
-; C) Suma de vectores
-;==========================
+;==============================
+; C) sum_vectors
+;==============================
 sum_vectors:
     push eax
     push ebx
@@ -159,18 +159,18 @@ sum_vectors:
 
     xor esi, esi
 
-.sum_loop:
+.loop:
     cmp esi, ecx
-    jge .sum_done
+    jge .done
 
-    mov al, [ebx + esi]     ; vector1[i]
-    add al, [edx + esi]     ; vector1[i] + vector2[i]
-    mov [ebx + esi], al     ; guardar en vector1
+    mov al, [ebx + esi]
+    add al, [edx + esi]
+    mov [ebx + esi], al
 
     inc esi
-    jmp .sum_loop
+    jmp .loop
 
-.sum_done:
+.done:
     pop esi
     pop edx
     pop ecx
@@ -178,36 +178,35 @@ sum_vectors:
     pop eax
     ret
 
-
-;==========================
-; D) Producto escalar
-;==========================
+;==============================
+; D) dot_product (CORREGIDO)
+;==============================
 dot_product:
     push ebx
     push ecx
     push edx
     push esi
+    push edi
 
-    xor eax, eax        ; resultado = 0
+    xor eax, eax        ; resultado
     xor esi, esi
 
-.dot_loop:
+.loop:
     cmp esi, ecx
-    jge .dot_done
+    jge .done
 
-    mov bl, [ebx + esi]   ; vector1[i]
-    mov dl, [edx + esi]   ; vector2[i]
+    ; cargar valores SIN destruir punteros
+    movzx edi, byte [ebx + esi]   ; v1[i]
+    movzx edx, byte [edx + esi]   ; v2[i]
 
-    movzx ebx, bl         ; convertir a 32 bits
-    movzx edx, dl
-
-    imul ebx, edx         ; ebx = v1[i] * v2[i]
-    add eax, ebx          ; acumular
+    imul edi, edx
+    add eax, edi
 
     inc esi
-    jmp .dot_loop
+    jmp .loop
 
-.dot_done:
+.done:
+    pop edi
     pop esi
     pop edx
     pop ecx
