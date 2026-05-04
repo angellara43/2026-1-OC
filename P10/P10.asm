@@ -18,6 +18,9 @@ xor eax, eax
 .ciclo:
 mov cl, byte
 test cl, cl
+jz.fin
+
+inc num1
 
 pop ebp
 ret
