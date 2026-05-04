@@ -1,3 +1,5 @@
+;Lara Caldera Angel. 2222625. Practica de laboratorio #10. OC.
+
 section .text
 global suma
 global strlen
