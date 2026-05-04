@@ -23,10 +23,16 @@ test cl, cl
 jz .fin
 inc eax
 jmp .ciclo
-
+.fin:
 pop ebp
 ret
 
-mov eax, 1
-xor ebx, ebx
-int 0x80
+getBit:
+push ebp
+mov ebp, esp
+mov eax, [ebp+8]
+mov ecx, [ebp+12]
+shr eax, cl
+and eax, 1
+pop ebp
+ret
