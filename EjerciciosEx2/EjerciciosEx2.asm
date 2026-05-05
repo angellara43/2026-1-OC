@@ -3,17 +3,16 @@
 %include "../LIB/pc_iox.inc"
 
 section .data
-cadena db "Hola Mundo",0
-msg1   db "Cadena original: ",0
-msg2   db 10,"Cadena invertida: ",0
-msg3   db 10,"Bit probado (CF): ",0
-msg4   db 10,"Resultado EsPar (AL): ",0
+cadena db "Hola Mundo", 0
+msg1   db "Cadena original: ", 0
+msg2   db 10,"Cadena invertida: ", 0
+msg3   db 10,"Bit probado (CF): ", 0
+msg4   db 10,"Resultado EsPar (AL): ", 0
 
 section .text
 global main
 
 main:
-
     ; ---- Imprimir cadena original ----
     mov ebx, msg1
     call PrintStr
@@ -32,8 +31,8 @@ main:
     call PrintStr
 
     ; ---- TestBit ----
-    mov al, 10101010b   ; ejemplo
-    mov cl, 1           ; bit a probar
+    mov al, 10101010b
+    mov cl, 1
     call TestBit
 
     mov ebx, msg3
@@ -57,17 +56,18 @@ main:
     mov ebx, msg4
     call PrintStr
 
-    add al, '0'   ; convertir a ASCII
+    add al, '0'
     call putchar
 
     call newline
-
     exit
 
-; ================================================
-; 1. Procedimiento PrintStr.
+; ================================================ 
+; 1. Procedimiento PrintStr. 
 ; ================================================
 PrintStr:
+    push ebx
+
 .next:
     mov al, [ebx]
     cmp al, 0
@@ -78,14 +78,18 @@ PrintStr:
     jmp .next
 
 .fin:
+    pop ebx
     ret
 
-; ================================================
-; 2. Procedimiento de invertir cadena.
+; ================================================ 
+; 2. Procedimiento de invertir cadena. 
 ; ================================================
 InvertirStr:
-    mov esi, ebx      ; inicio
-    mov edi, ebx      ; fin
+    push esi
+    push edi
+
+    mov esi, ebx
+    mov edi, ebx
 
 .find_end:
     mov al, [edi]
@@ -95,7 +99,7 @@ InvertirStr:
     jmp .find_end
 
 .end_found:
-    dec edi           ; último carácter válido
+    dec edi
 
 .swap:
     cmp esi, edi
@@ -112,12 +116,16 @@ InvertirStr:
     jmp .swap
 
 .fin:
+    pop edi
+    pop esi
     ret
 
-; ================================================
-; 3. Procedimiento del estado de un bit.
+; ================================================ 
+; 3. Procedimiento del estado de un bit. 
 ; ================================================
 TestBit:
+    push bx
+
     mov bl, al
     shr bl, cl
     and bl, 1
@@ -126,16 +134,20 @@ TestBit:
     je .cero
 
     stc
+    pop bx
     ret
 
 .cero:
     clc
+    pop bx
     ret
 
-; ================================================
-; 4. Procedimiento si EDX es par retorna 1.
+; ================================================ 
+; 4. Procedimiento si EDX es par retorna 1. 
 ; ================================================
 EsPar:
+    push eax
+
     mov eax, edx
     and eax, 1
 
@@ -143,8 +155,10 @@ EsPar:
     je .par
 
     mov al, 0
+    pop eax
     ret
 
 .par:
     mov al, 1
+    pop eax
     ret
