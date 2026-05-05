@@ -12,9 +12,6 @@ msg4   db 10,"Resultado EsPar (AL): ",0
 section .text
 global main
 
-; ================================================
-; MAIN (prueba de los procedimientos)
-; ================================================
 main:
 
     ; ---- Imprimir cadena original ----
@@ -67,11 +64,8 @@ main:
 
     exit
 
-
 ; ================================================
-; PrintStr
-; Imprime cadena terminada en 0
-; Entrada: EBX = dirección cadena
+; 1. Procedimiento PrintStr.
 ; ================================================
 PrintStr:
 .next:
@@ -86,11 +80,8 @@ PrintStr:
 .fin:
     ret
 
-
 ; ================================================
-; InvertirStr
-; Invierte cadena en memoria
-; Entrada: EBX = dirección cadena
+; 2. Procedimiento de invertir cadena.
 ; ================================================
 InvertirStr:
     mov esi, ebx      ; inicio
@@ -123,14 +114,8 @@ InvertirStr:
 .fin:
     ret
 
-
 ; ================================================
-; TestBit
-; Entrada:
-;   AL = valor
-;   CL = número de bit (0-7)
-; Salida:
-;   CF = valor del bit
+; 3. Procedimiento del estado de un bit.
 ; ================================================
 TestBit:
     mov bl, al
@@ -147,13 +132,8 @@ TestBit:
     clc
     ret
 
-
 ; ================================================
-; EsPar
-; Entrada:
-;   EDX = número
-; Salida:
-;   AL = 1 si par, 0 si impar
+; 4. Procedimiento si EDX es par retorna 1.
 ; ================================================
 EsPar:
     mov eax, edx
