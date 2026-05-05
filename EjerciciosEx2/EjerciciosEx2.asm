@@ -10,9 +10,9 @@ msg3   db 10,"Bit probado (CF): ", 0
 msg4   db 10,"Resultado EsPar (AL): ", 0
 
 section .text
-global main
+global _start
 
-main:
+_start:
     ; ---- Imprimir cadena original ----
     mov ebx, msg1
     call PrintStr
@@ -59,9 +59,13 @@ main:
     add al, '0'
     call putchar
 
-    call newline
-    ret
+    mov al, 10
+    call putchar
 
+    mov eax, 1
+    mov ebx, 0
+    int 0x80
+    
 ; ================================================ 
 ; 1. Procedimiento PrintStr. 
 ; ================================================

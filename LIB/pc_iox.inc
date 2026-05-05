@@ -11,6 +11,4 @@
 	extern pHex_w
 	extern pHex_dw
 
-	extern newline
-
 ;********************* fin *********************************************
