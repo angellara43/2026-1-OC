@@ -60,7 +60,7 @@ main:
     call putchar
 
     call newline
-    exit
+    ret
 
 ; ================================================ 
 ; 1. Procedimiento PrintStr. 
@@ -124,41 +124,21 @@ InvertirStr:
 ; 3. Procedimiento del estado de un bit. 
 ; ================================================
 TestBit:
-    push bx
+    push eax
 
-    mov bl, al
-    shr bl, cl
-    and bl, 1
+    shr al, cl
+    shr al, 1
 
-    cmp bl, 0
-    je .cero
-
-    stc
-    pop bx
-    ret
-
-.cero:
-    clc
-    pop bx
+    pop eax
     ret
 
 ; ================================================ 
-; 4. Procedimiento si EDX es par retorna 1. 
+; 4. Procedimiento si EDX es par retorna 1 en AL. 
 ; ================================================
 EsPar:
-    push eax
-
-    mov eax, edx
-    and eax, 1
-
-    cmp eax, 0
-    je .par
-
     mov al, 0
-    pop eax
-    ret
-
-.par:
+    test edx, 1
+    jnz .fin
     mov al, 1
-    pop eax
+.fin:
     ret
